@@ -353,7 +353,7 @@ public class Calculator extends JFrame{
 
 			}
 
-			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 연산자를 제외한  숫자와 나머지 연산자 버튼을 누른경우
+			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 제외한  다른 버튼을 누른경우
 				
 				numStr += str;  // 입력한 수식을 저장한다.
 				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
