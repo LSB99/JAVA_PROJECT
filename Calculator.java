@@ -415,9 +415,9 @@ public class Calculator extends JFrame{
 					}
 					
 					
-					for (int i = 0; i < init.size(); i++) {  //  '+' 연산자 뒤에  '-' 연산자가 나온 경우  빼기 연산으로 교체
+					for (int i = 0; i < init.size(); i++) {  
 			
-						if(init.get(i).equals("+") && init.get(i+1).equals("-")) {
+						if(init.get(i).equals("+") && init.get(i+1).equals("-")) {  //  '+' 연산자 뒤에  '-' 연산자가 나온 경우  빼기 연산으로 교체
 							
 							init.set(i, "-");
 							init.remove(i+1);
