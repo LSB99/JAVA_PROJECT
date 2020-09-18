@@ -372,8 +372,8 @@ public class Calculator extends JFrame{
 					
 					numStr += str;  // 입력한 수식을 저장한다.
 				}
-				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
 				
+				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
 			}
 
 			
