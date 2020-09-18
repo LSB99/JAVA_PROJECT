@@ -359,7 +359,8 @@ public class Calculator extends JFrame{
 
 			}
 
-			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 연산자를 제외한 숫자와 나머지 연산자 버튼 누른경우 
+			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 연산자를 제외한 숫자와 나머지 연산자 버튼 누른경우
+				
 
 				if (numStr.equals("") && str.equals("-")) { // 맨처음에 음수를 입력하는 경우
 
@@ -392,7 +393,7 @@ public class Calculator extends JFrame{
 						}
 					}
 				}
-
+				
 				numStr += str;  // 입력한 수식을 저장한다.
 				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
 			}
@@ -419,15 +420,25 @@ public class Calculator extends JFrame{
 
 						init.add(st.nextToken()); // 입력한 수식을 연산자,숫자,괄호를 기준으로 분리한 것을  리스트에 저장한다.
 					}
+					
+					for (int i = 0; i < init.size(); i++) {  //  '+' 연산자 뒤에  '-' 연산자가 나온 경우  빼기 연산으로 교체
+						
+						if(init.get(i).equals("+") && init.get(i+1).equals("-")) {
+							
+							init.set(i, "-");
+							init.remove(i+1);
+						}
+					}
 
 					for (int i = 0; i < init.size(); i++) { // 팩토리얼 계산을 하기 위한 반복문
 
 						if (init.get(i).equals("!")) {  // '!' 연산자일 경우 
 
 							if (i + 1 != init.size()) { //  '!' 연산자 뒤에 수식이 더 있는 경우
-
+								
+								// '!' 연산자 뒤에  사칙연산과 괄호 닫기가 아닌  다른 수식이 있으면
 								if (!init.get(i + 1).equals("+") && !init.get(i + 1).equals("-")
-										&& !init.get(i + 1).equals("×") && !init.get(i + 1).equals("÷")) { // '!' 연산자 뒤에  사칙연산이 아닌  다른 수식이 있으면
+										&& !init.get(i + 1).equals("×") && !init.get(i + 1).equals("÷") && !init.get(i + 1).equals(")")) { 
 									
 									throw new Exception(); // 오류로 예외처리
 								}
@@ -474,12 +485,42 @@ public class Calculator extends JFrame{
 					while (k < init.size()) {  // init 리스트 길이만큼 반복한다.
 
 						if (init.get(k).equals("(")) { // 괄호열기가 나오면
-
-							k++;  // init 리스트 인덱스를 1 증가시킨다. 
-
+							
 							///////////////////////////////////// 괄호 안의 수식 계산 시작
 
 							while (true) { // 무한반복
+								
+
+								if (init.get(k).equals("(") && init.get(k+1).equals("-")) {  // 괄호안의 수식에서 처음으로 음수가 나오는 경우 
+									
+									
+									ArrayList<String> init2 = new ArrayList<String>(); 
+									
+									
+									for(int i=0;i<k;i++) {
+										
+										init2.add(init.get(i));  //  괄호 열기 전까지의 init의 수식을 저장한다.
+									}
+									
+									init2.add(init.get(k));  // 괄호 저장
+									init2.add("0");   // 숫자 0 저장
+									
+									for(int i=k+1;i<init.size();i++) {
+										
+										init2.add(init.get(i));  //  괄호안의 수식을 저장한다.
+									}
+									
+									init = init2;	// 맨 앞에 0을 추가한 수식을 새로 대입한다. 
+									k++;   // init 리스트의 인덱스를  1 증가시킨다. 
+								}
+								
+								
+								if (init.get(k).equals("(") && !init.get(k+1).equals("-")) {  // 괄호안의 수식에서 처음으로 음수가 나오지 않으면
+									
+									k++;   // init 리스트의 인덱스를  1 증가시킨다. 
+									
+								}
+								
 
 								if (init.get(k).equals(")")) { // 괄호닫기가 나오면
 
@@ -501,14 +542,24 @@ public class Calculator extends JFrame{
 											inpoint += 2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
 										}
 									}
+									
 
 									before.add(String.valueOf(inresult)); // 괄호안을 계산한 최종값을  before 리스트에 추가한다.
+									
+									
+									if(k+1!=init.size()) {   // 괄호를 닫기 뒤에 수식이 더 있을때 
+										
+										if(init.get(k+1).equals(")")) {   // 괄호가 연속적으로 나오는 경우는 수식오류로 예외처리
+											
+											throw new Exception();
+										}
+									}
 									
 									k++;  // init 리스트 인덱스를 1 증가시킨다.
 									
 									intest.clear(); // 괄호안의 수식을 계산한 결과값을 저장한 리스트를 초기화한다.
-									
-									break; // 괄호닫기가 나왔으므로 반복문을 빠져나온다.
+
+									break;
 								}
 								
 								
@@ -537,7 +588,7 @@ public class Calculator extends JFrame{
 
 										intest.set(intest.size() - 1, String.valueOf(innum * n2)); // 기존에 계산한 값에다가 추가로 곱하여  intest의 마지막 값과 교체한다.
 										innum = innum * n2; // 계산한 값을 대입한다.
-										k += 2;   // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
 										
 										continue;
 									}
@@ -554,7 +605,7 @@ public class Calculator extends JFrame{
 										intest.set(intest.size() - 1, String.valueOf(n1 / n2)); // intest의 마지막 값을 교체한다.
 
 										innum = n1 / n2; // 계산한 값을 대입한다.
-										k += 2;   // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
 										
 										continue;
 
@@ -566,18 +617,17 @@ public class Calculator extends JFrame{
 
 										intest.set(intest.size() - 1, String.valueOf(innum / n2)); // 기존에 계산한 값에다가 추가로 나누어 intest의 마지막 값과 교체한다.
 										innum = innum / n2; // 계산한 값을 대입한다.
-										k += 2;    // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
 										continue;
 									}
 								}
 
-								else { // 곱하기 , 나누기 연산자가 아니면
+								else { // 곱하기 , 나누기 연산자와 숫자가 아니면 
 
 									intest.add(init.get(k)); // intest에 추가한다.
 									innum = 0; // 연산자 우선순위를 계산한  결과값을 초기화한다.
 									k++;  // init 리스트의 인덱스를 1 증가시킨다.
 								}
-
 							}
 						}  ///////////////////////////////////// 괄호 안의 수식 계산 끝
 						
@@ -687,7 +737,7 @@ public class Calculator extends JFrame{
 					for (int j = 1; j < after.size(); j++) {
 
 						if (after.get(j).equals("+")) { // 더하기
-
+							
 							result += Double.parseDouble(after.get(j + 1)); // 그다음 숫자를 더한다.
 						}
 
