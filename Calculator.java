@@ -380,7 +380,7 @@ public class Calculator extends JFrame{
 
 					while (st.hasMoreTokens()) {
 
-						init.add(st.nextToken()); // 입력한 수식을 연산자,숫자,괄호를 기준으로 분리한 것을  init 리스트에 저장한다.
+						init.add(st.nextToken()); // 입력한 수식에서 연산자,숫자,괄호를 기준으로 분리한 것을  init 리스트에 저장한다.
 					}
 					
 					
