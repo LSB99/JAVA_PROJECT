@@ -1,6 +1,7 @@
 /*
 프로젝트명 : 임수빈의 계산기 
 소속  :  IT융합자율학부
+학번  : 201814096
 이름  :  임수빈
 프로젝트 기간  :  2020년 9월 15일  ~ 2020년 9월 20일 
  */
@@ -48,7 +49,6 @@ public class Calculator extends JFrame{
 	Color lightgray = new Color(211, 211, 211); // 연회색
 	Color silver = new Color(192, 192, 192);  // 실버색
 
-	double result = 0;  // 최종 계산 결과값을 저장하는 변수 	
 	String numStr = ""; // 수식과 계산값을 저장하는 변수 
 
 	public Calculator() {
@@ -317,7 +317,6 @@ public class Calculator extends JFrame{
 			if (str.equals("C")) {  // 모두지우는 버튼을 누르면
 				numStr = "";    //  입력한 수식을 모두 초기화
 				showlabel.setText(numStr);  // 초기화된 수식을 화면에 보이도록 설정
-				result = 0; // 최종 결과값을 초기화
 			}
 
 			else if (str.equals("←")) { // 방금 전에 쓴 것을 지우는 버튼을 누르면
@@ -342,11 +341,6 @@ public class Calculator extends JFrame{
 						change += second.get(i);  //  change 변수에다가  수정된 문자들을 대입한다.
 					}
 
-					if (change.equals("")) { // 만약 모든 문자를 지웠다면
-
-						result = 0; //  최종 결과값을 초기화한다.
-					}
-
 					numStr = change;  // 수정된 수식으로 설정하고
 					showlabel.setText(numStr);  // 화면에 보이도록 설정한다.
 				}
@@ -359,43 +353,11 @@ public class Calculator extends JFrame{
 
 			}
 
-			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 연산자를 제외한 숫자와 나머지 연산자 버튼 누른경우
-				
-
-				if (numStr.equals("") && str.equals("-")) { // 맨처음에 음수를 입력하는 경우
-
-					numStr += "0"; // 음수 앞에다가 0을 집어넣어 계산을 하도록 설정한다.
-				}
-
-				
-				if (result < 0) { //  기존에 계산한 결과값에 이어서 계산을하는데  그 결과값이 음수인 경우 
-
-					StringTokenizer first = new StringTokenizer(numStr, "+-×÷%.123456789()", true);  // 입력된 수식을 분리한다. 
-
-					ArrayList<String> second = new ArrayList<String>();   // 분리된 문자들을 저장하는 리스트
-
-					while (first.hasMoreTokens()) {
-
-						second.add(first.nextToken());  // 리스트에 분리된 문자들을 하나씩 저장한다.
-					}
-
-					
-					// 결과값이 음수인 상태에서 수식을 여러개 입력하는 경우 0을 한번만 붙이기 위한 조건
-					
-					if (second.get(0).equals("-")) {  // 현재 수식의 맨 앞의 문자가  '-' 연산자인 경우에만  앞에 0을 붙인다. 
-
-						numStr = "";  // 수식을 초기화하고 
-						numStr += "0"; // 음수 앞에다가 0을 집어넣어 계산을 하도록 설정한다.
-
-						for (int i = 0; i < second.size(); i++) {
-
-							numStr += second.get(i);   // 0 뒤에다가 분리된 문자들을 하나씩 저장한다. 
-						}
-					}
-				}
+			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 연산자를 제외한  숫자와 나머지 연산자 버튼을 누른경우
 				
 				numStr += str;  // 입력한 수식을 저장한다.
 				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
+				
 			}
 
 			
@@ -418,11 +380,27 @@ public class Calculator extends JFrame{
 
 					while (st.hasMoreTokens()) {
 
-						init.add(st.nextToken()); // 입력한 수식을 연산자,숫자,괄호를 기준으로 분리한 것을  리스트에 저장한다.
+						init.add(st.nextToken()); // 입력한 수식을 연산자,숫자,괄호를 기준으로 분리한 것을  init 리스트에 저장한다.
 					}
 					
-					for (int i = 0; i < init.size(); i++) {  //  '+' 연산자 뒤에  '-' 연산자가 나온 경우  빼기 연산으로 교체
+					
+					if(init.get(0).equals("-")) {   // 맨처음 음수가 나오면  앞에 0을 붙여서 계산 오류를 방지한다.
 						
+						ArrayList<String> init2 = new ArrayList<String>();  // 입력한 수식의 맨앞에 0을 붙여서 저장할 init2 리스트
+						
+						init2.add("0");   // 맨 처음에  숫자 0 저장
+						
+						for(int i=0;i<init.size();i++) {
+							
+							init2.add(init.get(i));  //  init 리스트의 요소들을  init2 리스트에 저장한다.
+						}
+						
+						init = init2;	// 맨 앞에 0을 추가한 수식을  init 리스트에 새로 대입한다. 
+					}
+					
+					
+					for (int i = 0; i < init.size(); i++) {  //  '+' 연산자 뒤에  '-' 연산자가 나온 경우  빼기 연산으로 교체
+			
 						if(init.get(i).equals("+") && init.get(i+1).equals("-")) {
 							
 							init.set(i, "-");
@@ -732,7 +710,7 @@ public class Calculator extends JFrame{
 
 					///////////////////////////////////// 곱하기,나누기 연산자 우선처리하고 남은 수식을 계산하여 최종 결과값을 구한다.
 
-					result = Double.parseDouble(after.get(0)); // after의 첫번째 숫자를 대입한다.
+					double result = Double.parseDouble(after.get(0));  // 최종 계산 결과값을 저장하는 변수 after의 첫번째 숫자를 대입한다.
 
 					for (int j = 1; j < after.size(); j++) {
 
