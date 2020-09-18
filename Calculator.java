@@ -685,9 +685,8 @@ public class Calculator extends JFrame{
 										
 										else {   // 퍼센트 연산자 뒤에 수식이 있을때   
 											
-											//숫자가 있으면     예 :  (2x5%3) = 0.3
 											
-											if(isNumber(init.get(k+1)))  {  //숫자가 있으면
+											if(isNumber(init.get(k+1)))  {  //숫자가 있으면    예 : (2x5%3) = 0.3
 
 												double n2 = Double.parseDouble(init.get(k + 1)); // 퍼센트 연산자 뒤의 숫자
 
@@ -822,9 +821,7 @@ public class Calculator extends JFrame{
 									else {  // 퍼센트 연산자 뒤에 수식이 있을때 
 										
 										
-										//  뒤에 숫자가 있는 경우   예 :  3 + 2 + 5%3 = 5.15 
-										
-										if(isNumber(before.get(i+1))) {  
+										if(isNumber(before.get(i+1))) {  //  뒤에 숫자가 있는 경우   예 :  3 + 2 + 5%3 = 5.15 
 
 											double n1 = Double.parseDouble(before.get(i - 1)); // 퍼센트 연산자 앞의 숫자
 											
