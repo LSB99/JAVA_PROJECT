@@ -49,7 +49,7 @@ public class Calculator extends JFrame{
 	Color lightgray = new Color(211, 211, 211); // 연회색
 	Color silver = new Color(192, 192, 192);  // 실버색
 
-	String numStr = ""; // 수식과 계산값을 저장하는 변수 
+	String numStr = "0"; // 수식과 계산값을 저장하는 변수 
 
 	public Calculator() {
 	
@@ -355,7 +355,23 @@ public class Calculator extends JFrame{
 
 			else if (!str.equals("=")) {  // '=', 'C', '←', 'x!' 제외한  다른 버튼을 누른경우
 				
-				numStr += str;  // 입력한 수식을 저장한다.
+				if(numStr.equals("0")) {  // 현재 수식이 0일때 
+					
+					if(!str.equals("+") && !str.equals("×") && !str.equals("÷")) {  // 더하기, 곱하기, 나누기를  제외한 다른 버튼을 누르면
+						
+						numStr=str;  // 0을 지우고 새로 입력한 수식을 대입한다.
+					}
+						
+					else {   //  더하기, 곱하기 , 나누기 버튼을 누르면
+						
+						numStr += str;  // 현재 수식에 덧붙인다. 
+					}
+				}
+				
+				else {
+					
+					numStr += str;  // 입력한 수식을 저장한다.
+				}
 				showlabel.setText(numStr);  // 현재 화면에 보이도록 설정한다.
 				
 			}
@@ -405,6 +421,14 @@ public class Calculator extends JFrame{
 							
 							init.set(i, "-");
 							init.remove(i+1);
+						}
+						
+						if(i+1 != init.size()) {
+							
+							if(init.get(i).equals(")") && init.get(i+1).equals(")")) {  // 괄호 닫기를 연속해서 사용할 경우 예외처리
+								
+								throw new Exception();
+							}
 						}
 					}
 
@@ -734,7 +758,7 @@ public class Calculator extends JFrame{
 							throw new Exception(); // 예외처리
 						}
 					}
-
+					
 					if (!isDouble(result)) { // 최종 결과값이 정수이면
 
 						int result2 = (int) result; // 소수부분을 없애고 정수부분만 남겨 최종결과값을 구하고 
