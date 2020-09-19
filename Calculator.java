@@ -590,7 +590,7 @@ public class Calculator extends JFrame{
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    (1 + 2 x 2 ÷ 3 )
+									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    (1 + 2 x 2 x 3 )
 
 										double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
 
