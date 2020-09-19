@@ -570,10 +570,10 @@ public class Calculator extends JFrame{
 														
 								///////  괄호 안의 수식에서 연산자 우선순위를 계산한다.
 								
-								else if (init.get(k).equals("×")) {  // 곱하기가 나오는 경우 
+								else if (init.get(k).equals("×")) {  // 곱하기가 나오는 경우    
 									
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
+									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면  (1 + 2 x 2 + 3)
 
 										double n1 = Double.parseDouble(init.get(k - 1)); // 곱하기 연산자 앞의 숫자
 
@@ -590,7 +590,7 @@ public class Calculator extends JFrame{
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
+									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    (1 + 2 x 2 ÷ 3 )
 
 										double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
 
@@ -604,7 +604,7 @@ public class Calculator extends JFrame{
 
 								else if (init.get(k).equals("÷")) { // 나누기가 나오는 경우 
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
+									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면   ( 6 ÷ 3 + 1 ) 
 
 										double n1 = Double.parseDouble(init.get(k - 1)); // 나누기 연산자 앞의 숫자
 
@@ -619,7 +619,7 @@ public class Calculator extends JFrame{
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
+									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    ( 1 - 2 x 2 ÷ 3 )
 										
 	
 										double n2 = Double.parseDouble(init.get(k + 1)); // 나누기 연산자 뒤의 숫자
