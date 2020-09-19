@@ -573,60 +573,134 @@ public class Calculator extends JFrame{
 								else if (init.get(k).equals("×")) {  // 곱하기가 나오는 경우    
 									
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면  ( 1 + 2 x 2 - 3 )
-
-										double n1 = Double.parseDouble(init.get(k - 1)); // 곱하기 연산자 앞의 숫자
-
-										double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
-
-										intest.set(intest.size() - 1, String.valueOf(n1 * n2)); // intest의 마지막 값을 교체한다.
-
-										innum = n1 * n2; // 계산한 값을 대입한다.
+									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면  
 										
+										if(init.get(k+1).equals("-")) {   // 곱하기 뒤에 음수이면   예 : ( 6 x -3 ) = -18
+											
+											double n1 = Double.parseDouble(init.get(k - 1)); // 곱하기 연산자 앞의 숫자
+
+											double n2 = (-1)*Double.parseDouble(init.get(k + 2)); // 마이너스 부호 뒤의 숫자
+											
+											init.remove(k+1);
+
+											intest.set(intest.size() - 1, String.valueOf(n1 * n2)); // intest의 마지막 값을 교체한다.
+
+											innum = n1 * n2; // 계산한 값을 대입한다.
+											
+											
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										}
 										
-										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+
+										else {   //  예 :  ( 1 + 2 x 5 - 3 ) = 8
+											
+											double n1 = Double.parseDouble(init.get(k - 1)); // 곱하기 연산자 앞의 숫자
+
+											double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
+
+											intest.set(intest.size() - 1, String.valueOf(n1 * n2)); // intest의 마지막 값을 교체한다.
+
+											innum = n1 * n2; // 계산한 값을 대입한다.
+											
+											
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.		
+										}
 										
 										continue;
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    ( 1 + 2 ÷ 2 x 3 )
-
-										double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
-
-										intest.set(intest.size() - 1, String.valueOf(innum * n2)); // 기존에 계산한 값에다가 추가로 곱하여  intest의 마지막 값과 교체한다.
-										innum = innum * n2; // 계산한 값을 대입한다.
-										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    
 										
+										if(init.get(k+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 :  ( 2 ÷ 2 x -3 )  = -3
+											
+											double n2 = (-1)*Double.parseDouble(init.get(k + 2)); // 마이너스 부호 뒤의 숫자
+											
+											init.remove(k+1);  
+
+											intest.set(intest.size() - 1, String.valueOf(innum * n2)); // 기존에 계산한 값에다가 추가로 곱하여  intest의 마지막 값과 교체한다.
+											innum = innum * n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+											
+										}
+										
+										
+										else {   //   예 :  ( 1 + 2 ÷ 2 x 3 ) = 4
+											
+											double n2 = Double.parseDouble(init.get(k + 1)); // 곱하기 연산자 뒤의 숫자
+
+											intest.set(intest.size() - 1, String.valueOf(innum * n2)); // 기존에 계산한 값에다가 추가로 곱하여  intest의 마지막 값과 교체한다.
+											innum = innum * n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.										
+										}
+
 										continue;
 									}
 								}
 
 								else if (init.get(k).equals("÷")) { // 나누기가 나오는 경우 
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면   ( 6 ÷ 3 + 1 ) 
-
-										double n1 = Double.parseDouble(init.get(k - 1)); // 나누기 연산자 앞의 숫자
-
-										double n2 = Double.parseDouble(init.get(k + 1)); // 나누기 연산자 뒤의 숫자
-
-										intest.set(intest.size() - 1, String.valueOf(n1 / n2)); // intest의 마지막 값을 교체한다.
-
-										innum = n1 / n2; // 계산한 값을 대입한다.
-										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면   
 										
+										if(init.get(k+1).equals("-")) {  // 나누기 뒤에 음수이면    예 :  ( 6 ÷ -3 ) = -2
+													
+											double n1 = Double.parseDouble(init.get(k - 1)); // 나누기 연산자 앞의 숫자
+
+											double n2 = (-1)*Double.parseDouble(init.get(k + 2)); // 마이너스 부호 뒤의 숫자
+											
+											init.remove(k+1);
+
+											intest.set(intest.size() - 1, String.valueOf(n1 / n2)); // intest의 마지막 값을 교체한다.
+
+											innum = n1 / n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+											
+										}
+										
+										
+										else {   //  예 : ( 6 ÷ 3 + 1 )  = 3
+
+											double n1 = Double.parseDouble(init.get(k - 1)); // 나누기 연산자 앞의 숫자
+
+											double n2 = Double.parseDouble(init.get(k + 1)); // 나누기 연산자 뒤의 숫자
+
+											intest.set(intest.size() - 1, String.valueOf(n1 / n2)); // intest의 마지막 값을 교체한다.
+
+											innum = n1 / n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+											
+										}
+						
 										continue;
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    ( 1 - 2 x 2 ÷ 3 )
+									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면   
 										
-	
-										double n2 = Double.parseDouble(init.get(k + 1)); // 나누기 연산자 뒤의 숫자
+										
+										if(init.get(k+1).equals("-")) {  // 나누기 뒤에 음수이면    예 : ( 9 x 2 ÷ -3 )  = -6
+											
+											double n2 = (-1)*Double.parseDouble(init.get(k + 2)); // 마이너스 부호 뒤의 숫자
+											
+											init.remove(k+1);  
 
-										intest.set(intest.size() - 1, String.valueOf(innum / n2)); // 기존에 계산한 값에다가 추가로 나누어 intest의 마지막 값과 교체한다.
-										innum = innum / n2; // 계산한 값을 대입한다.
-										k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+											intest.set(intest.size() - 1, String.valueOf(innum / n2)); // 기존에 계산한 값에다가 추가로 나누어 intest의 마지막 값과 교체한다.
+											innum = innum / n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+											
+										}
+										
+										
+										else {   //  예  :  ( 1 - 9 x 2 ÷ 3 )  =  -5
+											 
+											double n2 = Double.parseDouble(init.get(k + 1)); // 나누기 연산자 뒤의 숫자
+
+											intest.set(intest.size() - 1, String.valueOf(innum / n2)); // 기존에 계산한 값에다가 추가로 나누어 intest의 마지막 값과 교체한다.
+											innum = innum / n2; // 계산한 값을 대입한다.
+											k += 2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.			
+											
+										}
+
 										continue;
 									}
 								}
@@ -750,28 +824,66 @@ public class Calculator extends JFrame{
 							if (before.get(i).equals("×")) { // 곱하기 연산자
 
 								if (num == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
+									
+									if(before.get(i+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 :  6 x -3 = -18
+										
+										
+										double n1 = Double.parseDouble(before.get(i - 1)); // 곱하기 연산자 앞의 숫자
 
-									double n1 = Double.parseDouble(before.get(i - 1)); // 곱하기 연산자 앞의 숫자
+										double n2 = (-1)*Double.parseDouble(before.get(i + 2)); // 마이너스 부호 뒤의 숫자
+										
+										before.remove(i+1);
 
-									double n2 = Double.parseDouble(before.get(i + 1)); // 곱하기 연산자 뒤의 숫자
+										after.set(after.size() - 1, String.valueOf(n1 * n2)); // after의 마지막 값을 교체한다.
 
-									after.set(after.size() - 1, String.valueOf(n1 * n2)); // after의 마지막 값을 교체한다.
+										num = n1 * n2; // 계산한 값을 대입한다.
+										i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
+									
+									else {    // 예 :  6 x 3 = 18
+										
+										double n1 = Double.parseDouble(before.get(i - 1)); // 곱하기 연산자 앞의 숫자
 
-									num = n1 * n2; // 계산한 값을 대입한다.
-									i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										double n2 = Double.parseDouble(before.get(i + 1)); // 곱하기 연산자 뒤의 숫자
+
+										after.set(after.size() - 1, String.valueOf(n1 * n2)); // after의 마지막 값을 교체한다.
+
+										num = n1 * n2; // 계산한 값을 대입한다.
+										i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
 									
 									continue;
-
 								}
 
 								else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
-
-									double n2 = Double.parseDouble(before.get(i + 1)); // 곱하기 연산자 뒤의 숫자
-
-									after.set(after.size() - 1, String.valueOf(num * n2)); // 기존에 계산한 값에다가 추가로 곱하여 after의 마지막 값과 교체한다.
 									
-									num = num * n2; // 계산한 값을 대입한다.
-									i +=2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+									
+									if(before.get(i+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 : 6 ÷ 2 x -3  = -9
+										
+										double n2 = (-1)*Double.parseDouble(before.get(i + 2)); // 마이너스 부호 뒤의 숫자
+										
+										before.remove(i+1);  
+
+										after.set(after.size() - 1, String.valueOf(num * n2)); // 기존에 계산한 값에다가 추가로 곱하여 after의 마지막 값과 교체한다.
+										
+										num = num * n2; // 계산한 값을 대입한다.
+										i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
+									
+
+									else {    //  예 :  6 ÷ 2 x 3  = 9
+										
+										double n2 = Double.parseDouble(before.get(i + 1)); // 곱하기 연산자 뒤의 숫자
+
+										after.set(after.size() - 1, String.valueOf(num * n2)); // 기존에 계산한 값에다가 추가로 곱하여 after의 마지막 값과 교체한다.
+										
+										num = num * n2; // 계산한 값을 대입한다.
+										i +=2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+									}
+									
 									
 									continue;
 								}
@@ -780,29 +892,66 @@ public class Calculator extends JFrame{
 							else if (before.get(i).equals("÷")) { // 나누기 연산자
 
 								if (num == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
-
-									double n1 = Double.parseDouble(before.get(i - 1)); // 나누기 연산자 앞의 숫자
 									
-									double n2 = Double.parseDouble(before.get(i + 1)); // 나누기 연산자 뒤의 숫자
+									
+									if(before.get(i+1).equals("-")) {  // 나누기 뒤에 음수이면   예 :  6 ÷ -3 = -2
+										
+										
+										double n1 = Double.parseDouble(before.get(i - 1)); // 나누기 연산자 앞의 숫자
 
-									after.set(after.size() - 1, String.valueOf(n1 / n2)); // after의 마지막 값을 교체한다.
+										double n2 = (-1)*Double.parseDouble(before.get(i + 2)); // 마이너스 부호 뒤의 숫자
+										
+										before.remove(i+1);
 
-									num = n1 / n2; // 계산한 값을 대입한다.
-									i +=2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										after.set(after.size() - 1, String.valueOf(n1 / n2)); // after의 마지막 값을 교체한다.
+
+										num = n1 / n2; // 계산한 값을 대입한다.
+										i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
+									
+									else {   //  예 :  6 ÷ 3 = 2
+										
+										double n1 = Double.parseDouble(before.get(i - 1)); // 나누기 연산자 앞의 숫자
+										
+										double n2 = Double.parseDouble(before.get(i + 1)); // 나누기 연산자 뒤의 숫자
+
+										after.set(after.size() - 1, String.valueOf(n1 / n2)); // after의 마지막 값을 교체한다.
+
+										num = n1 / n2; // 계산한 값을 대입한다.
+										i +=2;  // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+									}
 									
 									continue;
 
 								}
 
 								else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
+									
+									if(before.get(i+1).equals("-")) {  // 나누기 뒤에 음수이면  예 :  9 x 2 ÷ -3  = -6
+										
+										double n2 = (-1)*Double.parseDouble(before.get(i + 2)); // 마이너스 부호 뒤의 숫자
+										
+										before.remove(i+1);  
 
-									double n2 = Double.parseDouble(before.get(i + 1)); // 나누기 연산자 뒤의 숫자
+										after.set(after.size() - 1, String.valueOf(num / n2)); // 기존에 계산한 값에다가 추가로 나누어 after의 마지막 값과 교체한다.
+										
+										num = num / n2; // 계산한 값을 대입한다.
+										i +=2; // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
 									
-									after.set(after.size() - 1, String.valueOf(num / n2)); // 기존에 계산한 값에다가 추가로 나누어 after의 마지막 값과 교체한다.
-		
-									num = num / n2; // 계산한 값을 대입한다.
-									i +=2;    // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
-									
+									else {   //  예 :  9 x 2 ÷ 3  = 6
+										
+										double n2 = Double.parseDouble(before.get(i + 1)); // 나누기 연산자 뒤의 숫자
+										
+										after.set(after.size() - 1, String.valueOf(num / n2)); // 기존에 계산한 값에다가 추가로 나누어 after의 마지막 값과 교체한다.
+			
+										num = num / n2; // 계산한 값을 대입한다.
+										i +=2;    // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
+										
+									}
+	
 									continue;
 								}
 								
@@ -823,8 +972,7 @@ public class Calculator extends JFrame{
 									}
 									
 									else {  // 퍼센트 연산자 뒤에 수식이 있을때 
-										
-										
+
 										if(isNumber(before.get(i+1))) {  //  뒤에 숫자가 있는 경우   예 :  3 + 2 + 5%3 = 5.15 
 
 											double n1 = Double.parseDouble(before.get(i - 1)); // 퍼센트 연산자 앞의 숫자
