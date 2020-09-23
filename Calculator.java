@@ -304,7 +304,7 @@ public class Calculator extends JFrame{
 		
 		// Container 설정
 		setSize(600,900);   
-		setLocation(500,80);
+		setLocation(630,35);
 		setVisible(true);
 	}
 
@@ -323,7 +323,7 @@ public class Calculator extends JFrame{
 
 				if (!numStr.equals("")) { // 지우려는 수식이 있는경우
 
-					StringTokenizer first = new StringTokenizer(numStr, "+-×÷%.123456789()!", true); // 입력된 수식을 분리한다.
+					StringTokenizer first = new StringTokenizer(numStr, "+-×÷%.0123456789()!", true); // 입력된 수식을 분리한다.
 
 					ArrayList<String> second = new ArrayList<String>();  // 분리된 문자들을 저장하는 리스트
 
