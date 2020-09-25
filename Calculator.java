@@ -3,7 +3,7 @@
 소속  :  IT융합자율학부
 학번  : 201814096
 이름  :  임수빈
-프로젝트 기간  :  2020년 9월 15일  ~ 2020년 9월 20일 
+프로젝트 기간  :  2020년 9월 15일  ~ 2020년 9월 23일 
  */
 import java.awt.*;
 import java.awt.event.*;
@@ -492,6 +492,59 @@ public class Calculator extends JFrame{
 							} 
 						}
 					}
+					
+					
+					for(int i=0; i<init.size();i++) {
+										
+						if(init.get(i).equals("%")) {   // 퍼센트 연산자일 경우
+							
+							
+							if(i+1 != init.size()) {  // 뒤에 수식이 더 있을때 
+								
+								if(isNumber(init.get(i+1))) {  // 그것이 숫자일 경우    예  :  5%2 = 0.1
+									
+									ArrayList<String> init2 = new ArrayList<String>(); 
+									
+									
+									for(int j=0;j<i-1;j++) {  // 퍼센트 연산자 앞에 있는 숫자 전까지 대입
+										
+										init2.add(init.get(j));  
+									}
+									
+									// 퍼센트의 앞의 숫자에서 100을 나눈후  퍼센트 뒤의 숫자와 곱한다.
+									double n = Double.parseDouble(init.get(i-1))/100 * Double.parseDouble(init.get(i+1));  
+									
+									init2.add(String.valueOf(n));  // 그 결과값을 대입
+								
+									for(int j=i+2;j<init.size();j++) {  // 퍼센트 뒤의 숫자 바로  다음 수식부터 대입
+										
+										init2.add(init.get(j)); 
+									}
+									
+									
+									init = init2;  // 수정한 수식을 대입한다.
+								}
+													
+								else {  // 숫자가 아닐 경우   예 :  5% x 2  = 0.1
+									
+									double n = Double.parseDouble(init.get(i-1))/100;  // 퍼센트 앞의 숫자를 100 나눠서 
+									
+									init.set(i-1, String.valueOf(n));  // 대입한다.
+									init.remove(i);  //  % 삭제
+									i = i-1;  // % 가 연속적으로 나오는 경우를 대비함.  예 :  88%% 
+								}
+							}
+
+								
+							else {  // 뒤에 수식이 없는 경우    예 :  5%  = 0.05
+								
+								double n = Double.parseDouble(init.get(i-1))/100;  // 퍼센트 앞의 숫자를 100 나눠서 
+								
+								init.set(i-1, String.valueOf(n));  // 대입한다.
+								init.remove(i);  //  %  삭제
+							}
+						}
+					}
 
 					
 					int k = 0;  // init 리스트의  인덱스 변수 
@@ -573,7 +626,7 @@ public class Calculator extends JFrame{
 								else if (init.get(k).equals("×")) {  // 곱하기가 나오는 경우    
 									
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면  
+									if (innum == 0) { // 곱하기 , 나누기 연산자가 연속적으로 있지 않으면  
 										
 										if(init.get(k+1).equals("-")) {   // 곱하기 뒤에 음수이면   예 : ( 6 x -3 ) = -18
 											
@@ -610,7 +663,7 @@ public class Calculator extends JFrame{
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면    
+									else { // 곱하기 , 나누기 연산자가 연속적으로 있으면    
 										
 										if(init.get(k+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 :  ( 2 ÷ 2 x -3 )  = -3
 											
@@ -640,7 +693,7 @@ public class Calculator extends JFrame{
 
 								else if (init.get(k).equals("÷")) { // 나누기가 나오는 경우 
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면   
+									if (innum == 0) { // 곱하기 , 나누기 연산자가 연속적으로 있지 않으면   
 										
 										if(init.get(k+1).equals("-")) {  // 나누기 뒤에 음수이면    예 :  ( 6 ÷ -3 ) = -2
 													
@@ -675,7 +728,7 @@ public class Calculator extends JFrame{
 
 									}
 
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면   
+									else { // 곱하기 , 나누기 연산자가 연속적으로 있으면   
 										
 										
 										if(init.get(k+1).equals("-")) {  // 나누기 뒤에 음수이면    예 : ( 9 x 2 ÷ -3 )  = -6
@@ -705,93 +758,9 @@ public class Calculator extends JFrame{
 									}
 								}
 								
-								else if (init.get(k).equals("%")) { // 퍼센트가 나오는 경우 
+						
 
-									if (innum == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
-										
-										if(init.get(k+1).equals(")")) {   // 퍼센트 연산자 뒤에 아무것도 없는 경우   예 :  (5%) = 0.05
-											
-											double n = Double.parseDouble(init.get(k - 1));
-											
-											intest.set(intest.size() - 1, String.valueOf(n/100)); // intest의 마지막 값을 교체한다.
-											
-											k++;
-										}
-										
-										else {  // 퍼센트 뒤에 수식이 있을때 
-																						
-											if(isNumber(init.get(k+1)))  {   // 숫자인 경우   예 :  (5%3) = 0.15 
-
-												double n1 = Double.parseDouble(init.get(k - 1)); // 퍼센트 연산자 앞의 숫자
-
-												double n2 = Double.parseDouble(init.get(k + 1)); // 퍼센트 연산자 뒤의 숫자
-
-												intest.set(intest.size() - 1, String.valueOf(n1*n2/100)); // intest의 마지막 값을 교체한다.
-
-												innum = n1*n2/100; // 계산한 값을 대입한다.
-												
-												k+=2;
-												
-											}
-											
-											
-											else {  // 숫자가 아닌 경우  예 : (2 + 5% x 2) = 2.1
-												
-												double n = Double.parseDouble(init.get(k - 1));
-												intest.set(intest.size() - 1, String.valueOf(n/100)); // intest의 마지막 값을 교체한다.
-												
-												innum = n/100;
-												k++;
-											}
-											
-										}
-
-										continue;
-									}
-
-									else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
-										
-										if(init.get(k+1).equals(")")) {   // 퍼센트 연산자 뒤에 아무것도 없는 경우   예 : (2 x 5%) = 0.1
-											
-											intest.set(intest.size() - 1, String.valueOf(innum/100)); // intest의 마지막 값을 교체한다.
-											
-											k++;
-										}
-										
-										
-										else {   // 퍼센트 연산자 뒤에 수식이 있을때   
-											
-											
-											if(isNumber(init.get(k+1)))  {  //숫자가 있으면    예 : (2x5%3) = 0.3
-
-												double n2 = Double.parseDouble(init.get(k + 1)); // 퍼센트 연산자 뒤의 숫자
-												
-												// 기존에 계산한 값에다가 추가로 계산하여 intest의 마지막 값과 교체한다.
-												
-												intest.set(intest.size() - 1, String.valueOf(innum*n2/100)); 
-												
-												innum = innum*n2/100; // 계산한 값을 대입한다.
-												
-												k+=2;
-												
-											}
-											
-											else {  // 숫자가 아닌 경우  예  :  (2 x 5% x 2) = 0.2
-												
-												intest.set(intest.size() - 1, String.valueOf(innum/100)); // intest의 마지막 값을 교체한다.
-												
-												innum = innum/100;
-												k++;
-											}
-											
-										}
-
-										continue;
-									}
-								}
-
-
-								else { // 곱하기 , 나누기 , 퍼센트 연산자와 숫자가 아니면 
+								else { // 곱하기 , 나누기 , 숫자가 아니면 
 
 									intest.add(init.get(k)); // intest에 추가한다.
 									innum = 0; // 연산자 우선순위를 계산한  결과값을 초기화한다.
@@ -823,7 +792,7 @@ public class Calculator extends JFrame{
 
 							if (before.get(i).equals("×")) { // 곱하기 연산자
 
-								if (num == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
+								if (num == 0) { // 곱하기 , 나누기  연산자가 연속적으로 있지 않으면
 									
 									if(before.get(i+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 :  6 x -3 = -18
 										
@@ -857,7 +826,7 @@ public class Calculator extends JFrame{
 									continue;
 								}
 
-								else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
+								else { // 곱하기 , 나누기 연산자가 연속적으로 있으면
 									
 									
 									if(before.get(i+1).equals("-")) {  // 곱하기 뒤에 음수이면   예 : 6 ÷ 2 x -3  = -9
@@ -891,7 +860,7 @@ public class Calculator extends JFrame{
 
 							else if (before.get(i).equals("÷")) { // 나누기 연산자
 
-								if (num == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않으면
+								if (num == 0) { // 곱하기 , 나누기 연산자가 연속적으로 있지 않으면
 									
 									
 									if(before.get(i+1).equals("-")) {  // 나누기 뒤에 음수이면   예 :  6 ÷ -3 = -2
@@ -926,7 +895,7 @@ public class Calculator extends JFrame{
 
 								}
 
-								else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있으면
+								else { // 곱하기 , 나누기 연산자가 연속적으로 있으면
 									
 									if(before.get(i+1).equals("-")) {  // 나누기 뒤에 음수이면  예 :  9 x 2 ÷ -3  = -6
 										
@@ -956,93 +925,9 @@ public class Calculator extends JFrame{
 								}
 								
 							}
-							
-							else if (before.get(i).equals("%")) { // 퍼센트 연산자
 
-								if (num == 0) { // 곱하기 , 나누기, 퍼센트 연산자가 연속적으로 있지 않을때 
-										
-									if(i+1==before.size()) {   // 퍼센트 연산자 뒤에 아무것도 없는 경우    예 : 5% = 0.05
-										
-										double n = Double.parseDouble(before.get(i - 1));
-										
-										after.set(after.size() - 1, String.valueOf(n/100)); // after의 마지막 값을 교체한다.
-										
-										num = n/100;
-										i++;
-									}
-									
-									else {  // 퍼센트 연산자 뒤에 수식이 있을때 
 
-										if(isNumber(before.get(i+1))) {  //  뒤에 숫자가 있는 경우   예 :  3 + 2 + 5%3 = 5.15 
-
-											double n1 = Double.parseDouble(before.get(i - 1)); // 퍼센트 연산자 앞의 숫자
-											
-											double n2 = Double.parseDouble(before.get(i + 1)); // 퍼센트 연산자 뒤의 숫자
-
-											after.set(after.size() - 1, String.valueOf(n1*n2/100)); // after의 마지막 값을 교체한다.
-
-											num = n1*n2/100; // 계산한 값을 대입한다.
-											i +=2;   // 그다음 연산자가 있는 자리로 인덱스를 설정한다.
-											
-										}
-
-										else {  // 뒤에 숫자가 아닌 경우   2 + 5% ÷ 2 = 2.025
-											
-											double n = Double.parseDouble(before.get(i - 1));
-											
-											after.set(after.size() - 1, String.valueOf(n/100)); // after의 마지막 값을 교체한다.
-											
-											num = n/100;
-											i++;
-										}
-										
-									}
-									
-									continue;
-								}
-
-								
-								else { // 곱하기 , 나누기, 퍼센트가 연속적으로 있을때 
-									
-									if(i+1==before.size()) {   // 퍼센트 연산자 뒤에 아무것도 없는 경우   예  : 5 x 5% = 0.25
-										
-										after.set(after.size() - 1, String.valueOf(num/100)); // after의 마지막 값을 교체한다.
-										
-										num = num/100;
-										
-										i++;
-									}
-									
-									else {    // 퍼센트 연산자 뒤에 수식이 있을때 
-										
-										///  숫자가 바로 나오는 경우     예  :  5 x 5%3 = 0.75
-										
-										if( isNumber(before.get(i+1)) ) {
-	
-											double n2 = Double.parseDouble(before.get(i + 1)); // 퍼센트 연산자 뒤의 숫자
-											
-											after.set(after.size() - 1, String.valueOf(num*n2/100)); // 기존에 계산한 값에다가 추가로 계산하여 after의 마지막 값과 교체한다.
-				
-											num = num*n2/100; // 계산한 값을 대입한다.
-											i+=2;
-											
-										}
-										
-										else {    ///  숫자가 아닌 경우    예  :  5 x 5% ÷ 2 = 0.125
-											
-											after.set(after.size() - 1, String.valueOf(num/100)); // after의 마지막 값을 교체한다.
-											num = num/100;
-											i++;
-										}
-										
-									}
-
-									continue;
-								}
-								
-							}
-
-							else {  // 곱하기 ,나누기,퍼센트 연산자가 아닌 경우
+							else {  // 곱하기 , 나누기  연산자가 아닌 경우
 
 								num = 0; // 계산한 값을 초기화한다.
 								
