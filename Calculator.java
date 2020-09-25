@@ -522,6 +522,7 @@ public class Calculator extends JFrame{
 									}
 
 									init = init2;  // 수정한 수식을 대입한다.
+									i = i-1;  //  % 가 연속적으로 나오는 경우를 대비함.  예 : 5%2% = 0.001
 								}
 													
 								else {  // 숫자가 아닐 경우   예 :  5% x 2  = 0.1
@@ -530,7 +531,7 @@ public class Calculator extends JFrame{
 									
 									init.set(i-1, String.valueOf(n));  // 대입한다.
 									init.remove(i);  //  % 삭제
-									i = i-1;  // % 가 연속적으로 나오는 경우를 대비함.  예 :  88%% 
+									i = i-1;  //  % 가 연속적으로 나오는 경우를 대비함.  예 :  88%% 
 								}
 							}
 
