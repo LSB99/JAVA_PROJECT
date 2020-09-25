@@ -520,8 +520,7 @@ public class Calculator extends JFrame{
 										
 										init2.add(init.get(j)); 
 									}
-									
-									
+
 									init = init2;  // 수정한 수식을 대입한다.
 								}
 													
